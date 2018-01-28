@@ -3,8 +3,6 @@ package com.github.mustachejava;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingJsonFactory;
-import com.github.mustachejava.codes.CommentCode;
-import com.github.mustachejava.codes.ExtendCode;
 import com.github.mustachejava.codes.IterableCode;
 import com.github.mustachejava.codes.PartialCode;
 import com.github.mustachejava.codes.ValueCode;
@@ -19,7 +17,6 @@ import com.github.mustachejava.resolver.DefaultResolver;
 import com.github.mustachejava.util.CapturingMustacheVisitor;
 import com.github.mustachejavabenchmarks.JsonCapturer;
 import com.github.mustachejavabenchmarks.JsonInterpreterTest;
-import com.google.common.collect.ImmutableMap;
 import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Test;
@@ -925,53 +922,16 @@ public class InterpreterTest extends TestCase {
     }
   }
 
-  public void testVariableInhertiance() throws IOException {
-    DefaultMustacheFactory mf = createMustacheFactory();
-    Mustache m = mf.compile("issue_201/chat.html");
-    StringWriter sw = new StringWriter();
-    m.execute(sw, new Object()).close();
-    assertEquals("<script src=\"test\"></script>", sw.toString());
-  }
-
   public void testIterator() throws IOException {
-    {
-      MustacheFactory mf = createMustacheFactory();
-      Mustache m = mf.compile(new StringReader("{{#values}}{{.}}{{/values}}{{^values}}Test2{{/values}}"), "testIterator");
-      StringWriter sw = new StringWriter();
-      m.execute(sw, new Object() {
-        Iterator values() {
-          return Arrays.asList(1, 2, 3).iterator();
-        }
-      }).close();
-      assertEquals("123", sw.toString());
-    }
-    {
-      MustacheFactory mf = new DefaultMustacheFactory(root) {
-        @Override
-        public MustacheVisitor createMustacheVisitor() {
-          return new DefaultMustacheVisitor(this) {
-            @Override
-            public void iterable(TemplateContext templateContext, String variable, Mustache mustache) {
-              list.add(new IterableCode(templateContext, df, mustache, variable) {
-                @Override
-                protected boolean addScope(List<Object> scopes, Object scope) {
-                  scopes.add(scope);
-                  return true;
-                }
-              });
-            }
-          };
-        }
-      };
-      Mustache m = mf.compile(new StringReader("{{#values}}{{.}}{{/values}}{{^values}}Test2{{/values}}"), "testIterator");
-      StringWriter sw = new StringWriter();
-      m.execute(sw, new Object() {
-        Iterator values() {
-          return Arrays.asList(1, null, 3).iterator();
-        }
-      }).close();
-      assertEquals("13", sw.toString());
-    }
+    MustacheFactory mf = createMustacheFactory();
+    Mustache m = mf.compile(new StringReader("{{#values}}{{.}}{{/values}}{{^values}}Test2{{/values}}"), "testIterator");
+    StringWriter sw = new StringWriter();
+    m.execute(sw, new Object() {
+      Iterator values() {
+        return Arrays.asList(1, 2, 3).iterator();
+      }
+    }).close();
+    assertEquals("123", sw.toString());
   }
 
   public void testObjectArray() throws IOException {
@@ -1294,15 +1254,6 @@ public class InterpreterTest extends TestCase {
     assertEquals("{{##", sw.toString());
   }
 
-  public void testImproperlyClosedVariable() throws IOException {
-    try {
-      new DefaultMustacheFactory().compile(new StringReader("{{{#containers}} {{/containers}}"), "example");
-      fail("Should have throw MustacheException");
-    } catch (MustacheException actual) {
-      assertEquals("Improperly closed variable in example:1 @[example:1]", actual.getMessage());
-    }
-  }
-
   public void testLimitedDepthRecursion() {
     try {
       StringWriter sw = execute("infiniteparent.html", new Context());
@@ -1312,14 +1263,6 @@ public class InterpreterTest extends TestCase {
     } catch (MustacheException e) {
       assertEquals("Maximum partial recursion limit reached: 100 @[infiniteparent.html:1]", e.getMessage());
     }
-  }
-
-  public void testIssue191() throws IOException {
-    MustacheFactory mustacheFactory = createMustacheFactory();
-    Mustache mustache = mustacheFactory.compile("templates/someTemplate.mustache");
-    StringWriter stringWriter = new StringWriter();
-    mustache.execute(stringWriter, ImmutableMap.of("title", "Some title!"));
-    assertEquals(getContents(root, "templates/someTemplate.txt"), stringWriter.toString());
   }
 
   public void testMalformedTag() {

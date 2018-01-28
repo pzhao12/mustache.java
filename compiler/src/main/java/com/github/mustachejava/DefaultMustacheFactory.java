@@ -61,10 +61,10 @@ public class DefaultMustacheFactory implements MustacheFactory {
   /**
    * Use the classpath to resolve mustache templates.
    *
-   * @param classpathResourceRoot the location in the resources where templates are stored
+   * @param resourceRoot the location in the resources where templates are stored
    */
-  public DefaultMustacheFactory(String classpathResourceRoot) {
-    this.mustacheResolver = new DefaultResolver(classpathResourceRoot);
+  public DefaultMustacheFactory(String resourceRoot) {
+    this.mustacheResolver = new DefaultResolver(resourceRoot);
   }
 
   /**
@@ -92,11 +92,8 @@ public class DefaultMustacheFactory implements MustacheFactory {
       filePath = dir + filePath;
     }
 
-    int sepIndex = name.lastIndexOf("/");
-    name = sepIndex == -1 ? name : name.substring(sepIndex);
-    
-    // Do not append extension if it has the same extension or original one
-    if (!(name.endsWith(extension) || name.contains("."))) {
+    // Do not append extension if it is already defined
+    if (!name.endsWith(extension)) {
       filePath = filePath + extension;
     }
 
