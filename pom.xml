@@ -3,7 +3,7 @@
 
   <groupId>com.github.spullara.mustache.java</groupId>
   <artifactId>mustache.java</artifactId>
-  <version>0.9.6-SNAPSHOT</version>
+  <version>0.9.4-SNAPSHOT</version>
   <description>Implementation of the Mustache language in Java.</description>
 
   <modules>
@@ -18,16 +18,6 @@
 
   <name>mustache.java</name>
   <url>http://github.com/spullara/mustache.java</url>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <javac.target>1.8</javac.target>
-    <jackson.version>2.7.4</jackson.version>
-  <gib.commitRange>${env.TRAVIS_COMMIT_RANGE}</gib.commitRange>
-        <gib.enabled>true</gib.enabled>
-        <gib.useEkstazi>true</gib.useEkstazi>
-        <gib.excludePathRegex>(.*\.apt$)|(.*\.txt$)|(.*\.md$)|(.*\.html$)|(.*\.rst$)|(.*\.scss$)|(.*\.css$)|(.*\.png$)|(.*\.py$)|(.*README$)|(.*\.jpg$)|(.*\.jpeg$)|(.*NOTICE$)|(.*\.gitignore$)</gib.excludePathRegex>
-    </properties>
 
   <developers>
     <developer>
@@ -54,9 +44,9 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:https://github.com/spullara/mustache.java.git</connection>
-    <developerConnection>scm:git:https://github.com/spullara/mustache.java.git</developerConnection>
-    <url>scm:git:https://github.com/spullara/mustache.java.git</url>
+    <connection>scm:git:git@github.com:spullara/mustache.java.git</connection>
+    <developerConnection>scm:git:git@github.com:spullara/mustache.java.git</developerConnection>
+    <url>scm:git:git@github.com:spullara/mustache.java.git</url>
     <tag>HEAD</tag>
   </scm>
 
@@ -89,24 +79,19 @@
             </execution>
           </executions>
         </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.5.1</version>
-          <configuration>
-            <compilerVersion>${javac.target}</compilerVersion>
-            <source>${javac.target}</source>
-            <target>${javac.target}</target>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>2.4</version>
-        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.2</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
@@ -151,5 +136,11 @@
       </build>
     </profile>
   </profiles>
+<properties>
+        <gib.commitRange>${env.TRAVIS_COMMIT_RANGE}</gib.commitRange>
+        <gib.enabled>true</gib.enabled>
+        <gib.useEkstazi>true</gib.useEkstazi>
+        <gib.excludePathRegex>(.*\.apt$)|(.*\.txt$)|(.*\.md$)|(.*\.html$)|(.*\.rst$)|(.*\.scss$)|(.*\.css$)|(.*\.png$)|(.*\.py$)|(.*README$)|(.*\.jpg$)|(.*\.jpeg$)|(.*NOTICE$)|(.*\.gitignore$)</gib.excludePathRegex>
+    </properties>
 </project>
 

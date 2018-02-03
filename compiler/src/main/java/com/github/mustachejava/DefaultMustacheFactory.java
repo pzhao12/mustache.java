@@ -61,10 +61,10 @@ public class DefaultMustacheFactory implements MustacheFactory {
   /**
    * Use the classpath to resolve mustache templates.
    *
-   * @param classpathResourceRoot the location in the resources where templates are stored
+   * @param resourceRoot the location in the resources where templates are stored
    */
-  public DefaultMustacheFactory(String classpathResourceRoot) {
-    this.mustacheResolver = new DefaultResolver(classpathResourceRoot);
+  public DefaultMustacheFactory(String resourceRoot) {
+    this.mustacheResolver = new DefaultResolver(resourceRoot);
   }
 
   /**

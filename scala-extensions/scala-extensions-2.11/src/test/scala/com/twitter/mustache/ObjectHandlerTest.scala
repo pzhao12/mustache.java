@@ -2,9 +2,8 @@ package com.twitter.mustache
 
 import com.github.mustachejava.DefaultMustacheFactory
 import com.twitter.util.{Future, FuturePool}
-import java.io.{StringReader, StringWriter}
+import java.io.{StringWriter, StringReader}
 import java.util.concurrent.{Callable, Executors}
-
 import org.junit.{Assert, Test}
 
 class ObjectHandlerTest {
@@ -98,37 +97,5 @@ class ObjectHandlerTest {
       val bar = None
     }).close()
     Assert.assertEquals("Hello", sw.toString)
-  }
-
-  @Test
-  def testClass() {
-    val mf = new DefaultMustacheFactory()
-    mf.setObjectHandler(new ScalaObjectHandler)
-    val m = mf.compile(
-      new StringReader("{{#map}}{{test}}{{test2}}{{/map}}"),
-      "helloworld"
-    )
-    case class TestClass(
-      test: String
-    )
-    val sw = new StringWriter
-    val w = m.execute(sw, Map( "map" -> TestClass("fred") ) ).close()
-    Assert.assertEquals("fred", sw.toString())
-  }
-
-  @Test
-  def testClassDot() {
-    val mf = new DefaultMustacheFactory()
-    mf.setObjectHandler(new ScalaObjectHandler)
-    val m = mf.compile(
-      new StringReader("{{map.test}}"),
-      "helloworld"
-    )
-    case class TestClass(
-      test: String
-    )
-    val sw = new StringWriter
-    val w = m.execute(sw, Map( "map" -> TestClass("fred") ) ).close()
-    Assert.assertEquals("fred", sw.toString())
   }
 }
